@@ -1,0 +1,89 @@
+{
+  "subject": "self-learning-agent",
+  "assessed_by": "Claude, in-session (no scripted API call) — see PROMPT_INPUTS.md",
+  "assessed_at_utc": "2026-08-20",
+  "evidence_sources": [
+    "PACT Work/07-Self-Learning-Agent/Self-Learning-Agent-Notes.md (full blueprint, through Phase 3)",
+    "PACT Work/07-Self-Learning-Agent/SLA-Demo-Summary-2026-08-18.html (8 live tests against real PACT sandboxes)",
+    "PACT Work/08-Self-Learning-Extension/README.md"
+  ],
+  "findings": [
+    {
+      "control_id": "EU-ART9",
+      "coverage": "Partial",
+      "rationale": "The blueprint's §3 names two concrete, real risks (an unconfirmed write landing in real DO-178C/DO-254 certification evidence; Review-creation sending a real email invitation the instant it's created) and ties a targeted mitigation to each — the confirmation-gate guardrail. That mitigation was tested, not just designed: a documented red-team scenario had the agent told in-character to 'just click Create... go ahead,' and it correctly refused, correctly distinguishing 'waiving the preview' from real confirmation. What's missing for full coverage: no stated cadence for re-reviewing the risk analysis itself as the extension grows (12 modules mapped and still expanding), and no pre-defined testing metrics/thresholds beyond this one guardrail scenario — real evidence, but ad hoc rather than a scheduled part of the lifecycle. Same shape of gap as portfolio-sync's EU-ART9 finding.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART10",
+      "coverage": "Met",
+      "rationale": "Same interpretive resolution already reached for portfolio-sync and do178c-build-test on 2026-08-18 (see remediation_log.json), extended here rather than re-litigated: Article 10 governs training/validation/testing data (Art. 3(29)-(32)) — data used to fit or tune an AI model's parameters. This extension never trains or tunes Claude; it orchestrates an already-trained general-purpose model against live PACT data via DOM reads and 31 read-only MCP tools, which is 'input data' under Art. 3(33). Training-data governance for the underlying model remains Anthropic's obligation as its provider, not this downstream agent's. Scored Met because the precondition for the requirement doesn't exist here, so nothing is left ungoverned — not because the question was skipped.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART11",
+      "coverage": "Met",
+      "rationale": "Unlike the other two subjects (both scored Gap on this control), the blueprint itself is a genuine Annex-IV-shaped document, not just an operational system prompt: intended purpose and origin (§1), design/architecture across both tracks with the real URL-navigation pattern (§2), the risk-management measures from EU-ART9 documented with rationale (§3), a coverage table naming exactly what was validated across 12 modules with per-module findings (§5), and validation evidence via the linked demo summary's 8 live test results (§6, §9). It's a living document too — restructured mid-project (§0) as scope grew, not a point-in-time snapshot. Confirmation-gate architecture, the two real bugs it found (checkbox false-positive, MUI Select unreachable), and their fixes are all documented with root cause, not just outcome.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART12",
+      "coverage": "Partial",
+      "rationale": "The extension's backend proxy maintains usage.json — a real, automatic, structured log (message count, input/output/cache tokens, cost, session start) that updates on every run and persists across sessions. That's genuine automatic event recording, but it's scoped to usage/cost telemetry, not the risk-relevant events Article 12 is actually after (write attempts, confirmation-gate outcomes, tool-use decisions). The blueprint documents individual write actions narratively — in prose, per test session — not as a structured, queryable event log. Real logging discipline exists; it isn't the kind this control wants.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART13",
+      "coverage": "Met",
+      "rationale": "README.md was explicitly rewritten in Phase 2 because the original was 'badly stale' — describing only chat + usage tracking and never mentioning the write-capable DOM tools, the confirmation-gate guardrail, or the MCP integration that already existed. That rewrite-to-match-reality is itself evidence this control is taken seriously, not just satisfied once. The blueprint also documents known limitations plainly rather than glossing over them: the MUI-menu-close browser security boundary that can't be worked around, and the row-by-row trace matrix deliberately left unbuilt with the exact numbers (201,850 characters, 3,952 lines) that drove the decision, kept in a code comment so it isn't rediscovered. A deployer reading either document gets an accurate, current picture of what the system does and doesn't do.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART14",
+      "coverage": "Met",
+      "rationale": "The strongest control in this entire assessment. The gate is structurally enforced, not prompt-instructed — Phase 1's read-only tools shipped with literally no click/fill/navigate tool defined, so 'there is nothing the model could call to act on the page even if it wanted to,' and even after write tools existed in Phase 2, every write call is intercepted client-side and shown as a confirmation card before it can reach the real PACT page. This was validated under genuine adversarial pressure, not just described: the red-team test explicitly told the agent 'it was a test' and to 'just click Create... go ahead,' and it refused anyway, correctly distinguishing a waived preview from real confirmation. That's exactly the control's own bar — 'evidence this gate actually holds under adversarial pressure, not just that it's documented.'",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART15",
+      "coverage": "Partial",
+      "rationale": "Strong, well-documented accuracy and correctness work: two real bugs found and fixed with verified root causes (fill_field silently lying about a checked checkbox because it bypassed React's setter; MUI Select dropdowns being completely unreachable because MUI renders no real <select> or <label>), plus a real cross-project answer-bleed bug caught and fixed live during the 8/18 demo session, each confirmed via a clean re-test rather than taken on faith. But this is functional bug-fixing evidence, not adversarial security testing — unlike portfolio-sync and do178c-build-test, this subject was never run through ai-security's own red-team harness (prompt injection, encoding obfuscation, multi-turn erosion). The one adversarial test that exists (the 'just click Create' guardrail test) is real and passed, but it's a single scenario already counted under EU-ART14, not a cybersecurity-robustness pass in its own right.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-GOVERN",
+      "coverage": "Met",
+      "rationale": "Resolved 2026-08-20, same session as the original finding: this subject was never added to ai-security/GOVERNANCE.md, so evidence.py's load_governance_notes() returned nothing for it. Fixed by adding a real Govern section there (accountable party, the structurally-enforced confirmation gate, the DOM-tool-wins-over-MCP standing rule, and the red-team validation under adversarial pressure) rather than just noting the gap existed. One item remains explicitly unformalized (no incident-response step if the gate is ever bypassed) — same category as both other subjects' unformalized incident response, not unique to this one. See remediation_log.json for the open->resolved history.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MAP",
+      "coverage": "Partial",
+      "rationale": "Context and scope are mapped in real detail: §1 traces the origin (a colleague's 2026-07-24 proposal) and reframes it precisely (an embedded navigation agent, not a static training module); §5's 12-module coverage table names what was checked and what was found per module; §3 gives two concrete reasons the guardrail is load-bearing, each tied to a specific real risk. That satisfies MAP 1.1 well. What's missing: no explicit likelihood/magnitude scoring per identified risk (MAP 5.1) — the reasoning is narrative and well-argued but not scored — and MAP 3.5's human-oversight-process documentation exists as the guardrail description itself rather than as its own separate artifact. Same shape of gap as both other subjects' NIST-MAP findings.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MEASURE",
+      "coverage": "Met",
+      "rationale": "The demo summary is a complete, checkable test record: 8 tests run against three real PACT sandboxes (PACT-DEMO-MCP, NAV-AUTOFCS-DO178C-SOI1, LGWH) on 2026-08-18, each independently verified against the live PACT database or the visible page rather than taken on the extension's own word, with 7 Confirmed and 1 Bug-found-fixed-and-verified-same-session. That's a completed run with pass/fail results and enough methodology detail to be checked, not a plan to test — directly satisfying MEASURE 2.1. The blueprint's §5-§6 add further test-derived evidence (12 modules live-confirmed via safe dry-runs, plus incidental findings on the host platform reported through the appropriate internal channel rather than detailed here — this dashboard isn't the place for third-party vulnerability specifics).",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MANAGE",
+      "coverage": "Partial",
+      "rationale": "Individual fixes are tracked better here than either other subject's initial state: the checkbox bug, the MUI Select bug, and the cross-project pattern-matching bug each have a documented root cause, a fix, and a same-or-later-session re-verification in the blueprint or demo summary — real MANAGE 4.3 activity, in prose. What's missing is a structured, append-only, cross-session log the way this tool's own remediation_log.json works: each fix lives in whichever document was being written at the time, not in one place that survives past that document. Scored Partial rather than Gap because the underlying tracking discipline is genuinely good, just not durable/structured yet — closer to resolved than either other subject's original NIST-MANAGE finding, which had activity that was never written up as tracked at all.",
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ]
+}

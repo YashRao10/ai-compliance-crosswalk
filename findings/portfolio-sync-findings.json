@@ -1,0 +1,89 @@
+{
+  "subject": "portfolio-sync",
+  "assessed_by": "Claude, in-session (no scripted API call) — see PROMPT_INPUTS.md",
+  "assessed_at_utc": "2026-08-18",
+  "evidence_sources": [
+    "ai-security/targets/portfolio_sync_system_prompt.md",
+    "ai-security/reports/redteam-report-20260804-092949-manual.json",
+    "ai-security/GOVERNANCE.md (Govern/Map subsections)"
+  ],
+  "findings": [
+    {
+      "control_id": "EU-ART9",
+      "coverage": "Partial",
+      "rationale": "The account-access hard constraint and Step 5's contrarian-check are real, targeted mitigations for the two risks that matter most, and both held under adversarial testing (INJ-02 fake-authority, INJ-07 urgency-bypass, both PASS). But this isn't a continuous risk-management *system*: no stated cadence for re-reviewing the risk table itself, and no pre-defined testing metrics/thresholds per Art 9(8) — the red-team run is real evidence but ad hoc, not a scheduled part of the lifecycle.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART10",
+      "coverage": "Met",
+      "rationale": "Resolved 2026-08-18 against EU AI Act Article 3 (Definitions), read live for this purpose: Article 10 governs 'training data' / 'validation data' / 'testing data' (Art. 3(29)-(32)) — data used to fit or tune an AI model's learnable/non-learnable parameters. portfolio-sync never trains or tunes Claude; it supplies 'input data' (Art. 3(33): data an AI system acts on to produce output) to an already-trained general-purpose AI model at inference time. Training-data governance for Claude itself is Anthropic's obligation as the GPAI model's provider (Chapter V), not something that attaches to a downstream agent built on the API. Scored Met rather than N/A because the precondition for the requirement (a training/validation/testing dataset to govern) doesn't exist here, so nothing is left ungoverned. Separately, Art. 3(4)'s 'deployer' definition excludes 'personal non-professional activity' — this is a personal trading tool never placed on any market — so the Act's obligations likely don't legally attach at all; noted as additional context, not used to exit the exercise (this crosswalk is a voluntary self-assessment regardless of legal applicability, same framing as ai-security/GOVERNANCE.md's own header).",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART11",
+      "coverage": "Gap",
+      "rationale": "The system prompt documents intended behavior in detail, and GOVERNANCE.md's Govern section adds policy-level documentation, but neither amounts to the Annex IV-style technical documentation package (design specs, development process record, formal risk-management documentation) Article 11 describes. No dedicated documentation artifact exists beyond these two operational documents.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART12",
+      "coverage": "Partial",
+      "rationale": "Real logging discipline exists — Step 2's append-only decisions-log requirement, explicit instruction to log zero-trading days rather than leave a gap — but it's a narrative decision log, not an automatic structured event log capturing every risk-relevant action. Sufficient for the trading-decision use case, short of full lifecycle event recording.",
+      "confidence": "medium",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART13",
+      "coverage": "Met",
+      "rationale": "The 'Report back' section requires summarizing portfolio changes, real news behind movers, what was/wasn't updated and why, and any decision left open — aimed directly at letting the deployer interpret output correctly. The close-vs-intraday labeling rule exists specifically to prevent a misleading output from being misread. Caveat: provider and deployer are the same person here, a simpler case than Article 13 anticipates, but that doesn't reduce coverage.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART14",
+      "coverage": "Met",
+      "rationale": "The account-access hard constraint is a genuine, non-bypassable human-execution gate for 3 of 4 accounts, and it held under sustained adversarial pressure — INJ-02 (fake authority), INJ-08 (roleplay jailbreak), INJ-09 (multi-turn erosion), INJ-10/11 (obfuscated instructions) all PASS. This is evidence the oversight gate holds under pressure, not just that it's stated.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "EU-ART15",
+      "coverage": "Partial",
+      "rationale": "Strong, tested robustness against one real threat class — prompt injection, encoding obfuscation, multi-turn erosion (11/11 PASS in the 2026-08-04 run) — plus real accuracy discipline for the close/intraday distinction. But this is coverage of one threat class, not the full 'accuracy, robustness, and cybersecurity' scope Article 15 describes.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-GOVERN",
+      "coverage": "Partial",
+      "rationale": "GOVERNANCE.md's own Govern subsection satisfies GOVERN 1.1 (a documented, understood constraint) and GOVERN 2.1 (accountable party named) — but the doc itself flags an explicit gap: no written incident-response step for what happens if the account-access constraint actually gets bypassed. Partial by its own admission, not this tool's judgment.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MAP",
+      "coverage": "Partial",
+      "rationale": "GOVERNANCE.md's Map table names 5 real risks with entry points and a 'why it matters' rationale each — satisfies MAP 1.1 and partially MAP 5.1. No explicit likelihood/magnitude scoring per risk, and MAP 3.5's human-oversight-process documentation exists informally (the account-access rule) but isn't written up as its own artifact.",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MEASURE",
+      "coverage": "Met",
+      "rationale": "GOVERNANCE.md's Measure section currently reads 'Empty — no live run has happened yet,' but that's stale: two real runs exist (2026-07-23, 2026-08-04) with full per-payload transcripts, pass/fail summaries (11/11 PASS as of the latest run), and documented methodology — directly satisfying MEASURE 2.1 and MEASURE 2.7. Scored Met because the specific threat class this subject's Map table calls out has real, current test evidence, even though it doesn't cover every NIST trustworthy-AI characteristic (fairness/bias/privacy/environmental-impact are out of scope for this risk profile).",
+      "confidence": "high",
+      "needs_human_review": false
+    },
+    {
+      "control_id": "NIST-MANAGE",
+      "coverage": "Gap",
+      "rationale": "Unlike Measure, this one is a real gap, not stale text. Real Manage-relevant activity did happen — the classifier's negation-blindness bug was found in the 2026-07-23 run and fixed by 2026-08-04, per the report's own run_mode_note — but it was never written up as tracked risk-response the way MANAGE 1.3/4.3 calls for. This is exactly what the GOVERNANCE.md backfill should fix.",
+      "confidence": "high",
+      "needs_human_review": false
+    }
+  ]
+}

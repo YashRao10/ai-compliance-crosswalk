@@ -1,0 +1,68 @@
+{
+  "_comment": "Append-only log. Current status per (subject, control_id) is its most recent entry. This is what closes this tool's own NIST-MANAGE gap (finding found -> tracked -> resolved), not just a static remediation list.",
+  "entries": [
+    {
+      "subject": "portfolio-sync",
+      "control_id": "EU-ART11",
+      "status": "open",
+      "date": "2026-08-18",
+      "note": "Initial finding from the first crosswalk run: no technical documentation package exists beyond the operational system prompt and GOVERNANCE.md's policy notes."
+    },
+    {
+      "subject": "portfolio-sync",
+      "control_id": "EU-ART10",
+      "status": "open",
+      "date": "2026-08-18",
+      "note": "Flagged for human review, not a confirmed gap: whether Article 10 (training-data governance) meaningfully applies to a non-trained agent system is an open interpretive question, not something resolved unilaterally."
+    },
+    {
+      "subject": "portfolio-sync",
+      "control_id": "NIST-MANAGE",
+      "status": "open",
+      "date": "2026-08-18",
+      "note": "Initial finding: real Manage-relevant activity happened (classifier negation-blindness bug found and fixed between the 07-23 and 08-04 red-team runs) but was never tracked as such until this crosswalk's GOVERNANCE.md backfill."
+    },
+    {
+      "subject": "do178c-build-test",
+      "control_id": "EU-ART10",
+      "status": "open",
+      "date": "2026-08-18",
+      "note": "Initial finding: no training/validation/testing dataset exists for this build/test orchestration agent, and unlike portfolio-sync there's no live-data-governance analog either. Same open interpretive question on whether Article 10 applies at all."
+    },
+    {
+      "subject": "do178c-build-test",
+      "control_id": "NIST-MANAGE",
+      "status": "open",
+      "date": "2026-08-18",
+      "note": "Initial finding: same pattern as portfolio-sync's NIST-MANAGE gap — real fix activity happened but was never tracked as such."
+    },
+    {
+      "subject": "portfolio-sync",
+      "control_id": "EU-ART10",
+      "status": "resolved",
+      "date": "2026-08-18",
+      "note": "Resolved by reading EU AI Act Article 3 (Definitions) directly. Article 10 governs training/validation/testing data (Art. 3(29)-(32)) — data used to fit or tune an AI model's parameters. portfolio-sync only supplies 'input data' (Art. 3(33)) to an already-trained general-purpose AI model; it never trains or tunes anything. Training-data governance for the underlying model is Anthropic's obligation as its provider (Chapter V), not this system's. Coverage updated Partial -> Met in findings/portfolio-sync-findings.json (nothing left ungoverned, since the requirement's precondition doesn't apply here). Secondary finding: Art. 3(4)'s deployer definition excludes 'personal non-professional activity,' which this likely is — noted as context, doesn't change the verdict."
+    },
+    {
+      "subject": "do178c-build-test",
+      "control_id": "EU-ART10",
+      "status": "resolved",
+      "date": "2026-08-18",
+      "note": "Resolved on the same basis as portfolio-sync's EU-ART10 entry above. Coverage updated Gap -> Met in findings/do178c-build-test-findings.json."
+    },
+    {
+      "subject": "self-learning-agent",
+      "control_id": "NIST-GOVERN",
+      "status": "open",
+      "date": "2026-08-20",
+      "note": "Initial finding from the third crosswalk subject's first run: self-learning-agent was never added to ai-security/GOVERNANCE.md, so no canonical governance section exists for it. The substance largely exists in the project blueprint (accountable party, standing no-autonomous-write rule) but hasn't been captured in the place this tool and ai-security both look for it."
+    },
+    {
+      "subject": "self-learning-agent",
+      "control_id": "NIST-GOVERN",
+      "status": "resolved",
+      "date": "2026-08-20",
+      "note": "Resolved same day as the initial finding: added a real Govern section to ai-security/GOVERNANCE.md covering the accountable party, the structurally-enforced confirmation gate, the DOM-tool-wins-over-MCP standing rule, and the red-team validation under adversarial pressure. Coverage updated Gap -> Met in findings/self-learning-agent-findings.json. One item remains explicitly unformalized (incident response if the gate is ever bypassed), same as the other two subjects' open items — not treated as blocking this resolution."
+    }
+  ]
+}

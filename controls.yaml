@@ -1,0 +1,189 @@
+# Reference library of compliance controls this tool crosswalks evidence against.
+#
+# EU AI Act entries: Chapter III, Section 2 (Articles 9-15), the substantive
+# requirements for high-risk AI systems. Verified directly against
+# https://artificialintelligenceact.eu/article/<n>/ (official text: Regulation
+# (EU) 2024/1689, Official Journal version of 13 June 2024) on 2026-08-18.
+# Entry into force: 2 August 2026 (Article 113).
+#
+# NIST AI RMF entries: the four top-level functions (Govern/Map/Measure/Manage),
+# matching the granularity ai-security/GOVERNANCE.md already uses. Verified
+# directly against https://airc.nist.gov/airmf-resources/playbook/<function>/
+# on 2026-08-18. Each description cites the specific numbered subcategories
+# most relevant to an AI-agent-as-tool context (not the full subcategory list,
+# which runs 19/16/23/13 items per function).
+
+controls:
+  - id: EU-ART9
+    framework: eu-ai-act
+    title: "Article 9 — Risk Management System"
+    description: >
+      A risk management system must be established, implemented, documented,
+      and maintained as a continuous iterative process across the system's
+      lifecycle — not a one-time check. It must identify and analyze known
+      and reasonably foreseeable risks to health, safety, or fundamental
+      rights, estimate/evaluate those risks (including under reasonably
+      foreseeable misuse), and adopt targeted mitigation measures. High-risk
+      systems must be tested against pre-defined metrics and thresholds to
+      confirm the mitigations work as intended.
+    what_would_satisfy_this: >
+      Documented risk identification (a risk/entry-point table or equivalent),
+      explicit mitigation measures tied to each identified risk, evidence the
+      mitigations were actually tested (not just designed), and — for full
+      coverage — a stated cadence for periodic review/update of the risk
+      analysis itself, not just a point-in-time snapshot.
+
+  - id: EU-ART10
+    framework: eu-ai-act
+    title: "Article 10 — Data and Data Governance"
+    description: >
+      Training, validation, and testing datasets must be subject to data
+      governance practices — relevant design choices, provenance, collection
+      practices, examination for possible bias, and identification of data
+      gaps. Applies most directly to systems that involve training/tuning
+      a model on a dataset.
+    what_would_satisfy_this: >
+      For a system that trains or fine-tunes a model on a dataset: documented
+      data provenance, quality checks, and bias examination. For a system
+      that instead orchestrates a general-purpose model against live/external
+      data at inference time (no training dataset of its own): documented
+      data-quality and verification practices for that live data (the closest
+      practical analog), with an explicit note that Article 10 in its literal
+      training-data sense may not directly apply — this is an interpretive
+      question worth a human call, not something to resolve unilaterally.
+
+  - id: EU-ART11
+    framework: eu-ai-act
+    title: "Article 11 — Technical Documentation"
+    description: >
+      Technical documentation must be drawn up before the system is placed on
+      the market, demonstrating compliance with this Section's requirements
+      and containing the information in Annex IV — general description,
+      design specifications, development process, risk management measures,
+      and more.
+    what_would_satisfy_this: >
+      A documentation set going beyond an operational system prompt —
+      something covering intended purpose, design/architecture, the risk
+      management measures from EU-ART9, and validation evidence, kept current
+      as the system changes.
+
+  - id: EU-ART12
+    framework: eu-ai-act
+    title: "Article 12 — Record-Keeping"
+    description: >
+      High-risk systems must technically allow for the automatic recording of
+      events ("logs") over the system's lifetime, appropriate to the
+      system's intended purpose and sufficient to identify situations that
+      may result in risk or substantial modification, and to facilitate
+      post-market monitoring.
+    what_would_satisfy_this: >
+      An automatic, structured event/decision log (not just narrative
+      session summaries) capturing risk-relevant events as they happen,
+      retained and reviewable independent of any single conversation.
+
+  - id: EU-ART13
+    framework: eu-ai-act
+    title: "Article 13 — Transparency and Provision of Information to Deployers"
+    description: >
+      High-risk systems must be designed so deployers can interpret the
+      system's output and use it appropriately — accompanied by instructions
+      covering the provider's identity, characteristics/capabilities/
+      limitations, known risks, performance metrics, and any human-oversight
+      measures.
+    what_would_satisfy_this: >
+      Clear, accessible documentation of what the system does and doesn't do,
+      its known limitations, and how to interpret its output correctly —
+      whether via a formal instructions-for-use document or (for a
+      single-operator system where provider and deployer are the same
+      person) built directly into the operational workflow the deployer
+      already sees every session.
+
+  - id: EU-ART14
+    framework: eu-ai-act
+    title: "Article 14 — Human Oversight"
+    description: >
+      High-risk systems must be designed to enable effective human oversight
+      during use — natural persons able to understand the system's
+      capacities/limitations, remain aware of automation bias, correctly
+      interpret output, decide not to use it or override/reverse it, and
+      intervene or stop the system via a "stop" mechanism.
+    what_would_satisfy_this: >
+      A concrete, non-bypassable point where a human must approve or execute
+      an action before it takes effect (not just a stated preference for
+      human review), evidence that this gate actually holds under adversarial
+      pressure (not just that it's documented), and a clear override/stop
+      path.
+
+  - id: EU-ART15
+    framework: eu-ai-act
+    title: "Article 15 — Accuracy, Robustness and Cybersecurity"
+    description: >
+      High-risk systems must achieve an appropriate level of accuracy,
+      robustness, and cybersecurity, and perform consistently in those
+      respects throughout their lifecycle — resilient against errors,
+      faults, inconsistencies, and attempts by unauthorized third parties to
+      alter use or performance by exploiting vulnerabilities.
+    what_would_satisfy_this: >
+      Documented accuracy/correctness checks specific to the system's actual
+      failure modes, and evidence of resilience testing against realistic
+      adversarial input (e.g. prompt injection, obfuscation, social
+      engineering) — not just a general claim of robustness.
+
+  - id: NIST-GOVERN
+    framework: nist-ai-rmf
+    title: "NIST AI RMF — Govern"
+    description: >
+      Policies, processes, and accountability structures for mapping,
+      measuring, and managing AI risk are in place, transparent, and
+      effectively implemented. Most relevant subcategories for an
+      agent-as-tool context: GOVERN 1.1 (legal/regulatory requirements
+      understood and documented), GOVERN 2.1 (roles/responsibilities/lines
+      of communication documented), GOVERN 4.1 (safety-first culture in
+      design and use).
+    what_would_satisfy_this: >
+      A written governance document naming who's accountable, what the hard
+      constraints are, and what standing rules exist — with gaps in that
+      documentation explicitly flagged rather than silently absent.
+
+  - id: NIST-MAP
+    framework: nist-ai-rmf
+    title: "NIST AI RMF — Map"
+    description: >
+      Context is established, the system is categorized, and risks/benefits
+      are mapped for all components. Most relevant subcategories: MAP 1.1
+      (intended purpose/context documented), MAP 3.5 (human oversight
+      processes defined per GOVERN), MAP 5.1 (likelihood/magnitude of
+      identified impacts characterized).
+    what_would_satisfy_this: >
+      A risk/entry-point table or equivalent naming what could go wrong and
+      through which channel, ideally with some indication of likelihood or
+      severity, not just a bare list.
+
+  - id: NIST-MEASURE
+    framework: nist-ai-rmf
+    title: "NIST AI RMF — Measure"
+    description: >
+      AI systems are evaluated for trustworthy characteristics using
+      appropriate methods and metrics. Most relevant subcategories: MEASURE
+      1.1 (metrics selected, starting with most significant risks), MEASURE
+      2.1 (test sets/metrics/TEVV details documented), MEASURE 2.7 (security
+      and resilience evaluated and documented).
+    what_would_satisfy_this: >
+      An actual test run against the risks identified in Map — not a plan to
+      test, a completed run with pass/fail results and enough detail
+      (transcripts, methodology) to be checked rather than taken on faith.
+
+  - id: NIST-MANAGE
+    framework: nist-ai-rmf
+    title: "NIST AI RMF — Manage"
+    description: >
+      Risks identified via Map and evaluated via Measure are prioritized,
+      responded to, and tracked to resolution. Most relevant subcategories:
+      MANAGE 1.3 (responses to high-priority risks developed and
+      documented), MANAGE 4.3 (incidents/errors tracked, responded to, and
+      the response documented).
+    what_would_satisfy_this: >
+      For each finding from Measure: what was found, what (if anything)
+      changed in response, and whether a re-run or re-check confirmed the
+      fix — logged even for findings judged to be non-issues, with the
+      reasoning kept rather than silently dropped.

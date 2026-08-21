@@ -391,6 +391,19 @@ PAGE_TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <title>AI Compliance Crosswalk — Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0d10">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Compliance Crosswalk">
+<meta property="og:description" content="Real AI agents checked against EU AI Act Articles 9-15 and NIST AI RMF -- every verdict written in-session against real evidence, not scored by a script.">
+<meta property="og:url" content="https://yashrao10.github.io/ai-compliance-crosswalk/">
+<meta property="og:image" content="https://yashrao10.github.io/ai-compliance-crosswalk/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Compliance Crosswalk">
+<meta name="twitter:description" content="Real AI agents checked against EU AI Act Articles 9-15 and NIST AI RMF -- every verdict written in-session against real evidence, not scored by a script.">
+<meta name="twitter:image" content="https://yashrao10.github.io/ai-compliance-crosswalk/og-image.png">
 <script>
   // Runs before first paint so there's no flash of the wrong theme.
   (function() {{

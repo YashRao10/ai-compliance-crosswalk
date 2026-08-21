@@ -31,6 +31,7 @@ jobs:
       - run: |
           mkdir -p _site
           cp reports/dashboard.html _site/index.html
+          cp og-image.png _site/og-image.png
 
       - uses: actions/upload-pages-artifact@v3
         with:

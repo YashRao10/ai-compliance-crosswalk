@@ -24,10 +24,11 @@
     },
     {
       "control_id": "EU-ART11",
-      "coverage": "Gap",
-      "rationale": "The system prompt documents intended behavior in detail, and GOVERNANCE.md's Govern section adds policy-level documentation, but neither amounts to the Annex IV-style technical documentation package (design specs, development process record, formal risk-management documentation) Article 11 describes. No dedicated documentation artifact exists beyond these two operational documents.",
-      "confidence": "high",
-      "needs_human_review": false
+      "coverage": "Met",
+      "rationale": "A dedicated Annex IV-style technical documentation package now exists (ai-security/targets/portfolio_sync_technical_documentation.md, written 2026-08-26 specifically to close this finding): general description and intended purpose, design/development process with real rationale per key choice (hard-scoped write access, contrarian-check requirement, close-vs-intraday discipline, order-history-first reconciliation — the latter two added in direct response to real production incidents, not speculative), monitoring/human-oversight measures, and a risk-management section citing the actual ai-security red-team results (11/11 PASS) including the one real defect found (classifier negation-blindness) and its fix. Two Annex IV elements are explicitly marked not-applicable rather than silently omitted: harmonised standards (none exist yet for this system class) and a formal declaration of conformity (this is a personal system, not a product placed on the EU market). Upgraded from Gap given the artifact now genuinely exists and is wired into this tool as real evidence (evidence.py), not just asserted.",
+      "confidence": "medium",
+      "needs_human_review": true,
+      "human_review_reason": "Whether a proportionate, personal-system-scoped documentation package satisfies Article 11 the same way a full Annex IV package would for a commercial system placed on the market is a genuine interpretive judgment, not a mechanical check — same category of open question as EU-ART10's resolved verdict elsewhere in this crosswalk. A human should confirm the scoping-down rationale (single-operator system, no market placement) is one they actually agree with before treating this as fully closed."
     },
     {
       "control_id": "EU-ART12",

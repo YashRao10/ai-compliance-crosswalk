@@ -63,6 +63,13 @@
       "status": "resolved",
       "date": "2026-08-20",
       "note": "Resolved same day as the initial finding: added a real Govern section to ai-security/GOVERNANCE.md covering the accountable party, the structurally-enforced confirmation gate, the DOM-tool-wins-over-MCP standing rule, and the red-team validation under adversarial pressure. Coverage updated Gap -> Met in findings/self-learning-agent-findings.json. One item remains explicitly unformalized (incident response if the gate is ever bypassed), same as the other two subjects' open items — not treated as blocking this resolution."
+    },
+    {
+      "subject": "portfolio-sync",
+      "control_id": "EU-ART11",
+      "status": "resolved",
+      "date": "2026-08-26",
+      "note": "Resolved by writing a real Annex IV-style technical documentation package (ai-security/targets/portfolio_sync_technical_documentation.md) covering general description, design/development process with rationale per real key choice, monitoring/human-oversight measures, and a risk-management section grounded in the actual red-team results and the classifier defect found and fixed. Wired into evidence.py as a real evidence source (SUBJECT_TECH_DOC_FILES), not just referenced. Coverage updated Gap -> Met in findings/portfolio-sync-findings.json. Flagged needs_human_review: true (confidence: medium) rather than closed unilaterally — whether a personal-system-scoped package satisfies Article 11 the way a full commercial-product package would is a real interpretive judgment, same category as the EU-ART10 resolution above, not a mechanical check. Two elements explicitly marked not-applicable rather than omitted: harmonised standards (none exist for this system class) and declaration of conformity (no EU market placement)."
     }
   ]
 }

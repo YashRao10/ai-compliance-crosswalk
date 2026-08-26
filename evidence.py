@@ -21,6 +21,13 @@ SUBJECT_PROMPT_FILES = {
     "do178c-build-test": AI_SECURITY_ROOT / "targets" / "do178c_build_test_system_prompt.md",
 }
 
+# Optional Annex IV-style technical documentation package, where one has been
+# written to close a real EU-ART11 Gap finding. Not every subject has one —
+# absence just means gather_evidence omits the field, not an error.
+SUBJECT_TECH_DOC_FILES = {
+    "portfolio-sync": AI_SECURITY_ROOT / "targets" / "portfolio_sync_technical_documentation.md",
+}
+
 # Subjects assessed from real project documents instead of ai-security's
 # system-prompt/red-team-report convention, because they were never run
 # through that harness. Each entry: subject -> [(label, path), ...].
@@ -70,6 +77,15 @@ def load_governance_notes(subject: str) -> str:
     return text[start:end].strip()
 
 
+def load_technical_documentation(subject: str) -> str:
+    """Returns the subject's Annex IV-style technical documentation package,
+    or empty string if none has been written for this subject yet."""
+    path = SUBJECT_TECH_DOC_FILES.get(subject)
+    if path is None or not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
+
+
 def load_subject_documents(subject: str) -> dict:
     """Reads a subject's registered freeform documents as raw text, keyed
     by label. For subjects assessed outside ai-security's own conventions."""
@@ -83,12 +99,16 @@ def gather_evidence(subject: str) -> dict:
     """Bundles everything available for a subject into one dict, for a
     human (or Claude, in-session) to read before writing findings."""
     if subject in SUBJECT_PROMPT_FILES:
-        return {
+        evidence = {
             "subject": subject,
             "system_prompt": load_system_prompt(subject),
             "redteam_results": load_redteam_results(subject),
             "governance_notes": load_governance_notes(subject),
         }
+        tech_doc = load_technical_documentation(subject)
+        if tech_doc:
+            evidence["technical_documentation"] = tech_doc
+        return evidence
     if subject in SUBJECT_DOC_FILES:
         return {
             "subject": subject,

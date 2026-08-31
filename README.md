@@ -1,5 +1,7 @@
 # AI Compliance Crosswalk
 
+[![Tests](https://github.com/YashRao10/ai-compliance-crosswalk/actions/workflows/tests.yml/badge.svg)](https://github.com/YashRao10/ai-compliance-crosswalk/actions/workflows/tests.yml)
+
 Maps EU AI Act (high-risk system Articles 9-15) and NIST AI RMF (Govern/Map/Measure/Manage)
 requirements to real evidence for an AI system, and produces a gap report: what's
 covered, what's partial, what's missing, and what needs a human decision rather
